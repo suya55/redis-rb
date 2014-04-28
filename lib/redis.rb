@@ -2414,17 +2414,17 @@ class Redis
       break if cursor == "0"
     end
   end
-  
+
   # Adds the specified elements to the specified HyperLogLog.
   # Available since 2.8.9.
   #
   # @example
   #   redis.pfadd 'hll', 'a', 'b', 'c', 'd', 'e', 'f', 'g'
-  #   # => (integer) 1
+  #   # => (Integer) 1
   #
   # @param (String) key
   # @param [String, Array<String>] elements elements to store.
-  # @return [integer] 1 if at least 1 HyperLogLog internal register was altered. 0 otherwise.
+  # @return [Integer] 1 if at least 1 HyperLogLog internal register was altered. 0 otherwise.
   def pfadd(key, *elements)
     synchronize do |client|
       client.call([:pfadd, key, elements])
@@ -2436,10 +2436,10 @@ class Redis
   #
   # @example
   #   redis.pfcount 'hll'
-  #   # => (integer) 5
+  #   # => (Integer) 5
   #
   # @param (String) key
-  # @return [integer] The approximated number of unique elements observed via #pfadd.
+  # @return [Integer] The approximated number of unique elements observed via #pfadd.
   def pfcount(key)
     synchronize do |client|
       client.call([:pfcount, key])
