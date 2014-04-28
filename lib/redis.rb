@@ -2414,7 +2414,52 @@ class Redis
       break if cursor == "0"
     end
   end
+  
+  # Adds the specified elements to the specified HyperLogLog.
+  # Available since 2.8.9.
+  #
+  # @example
+  #   redis.pfadd 'hll', 'a', 'b', 'c', 'd', 'e', 'f', 'g'
+  #   # => (integer) 1
+  #
+  # @param (String) key
+  # @param [String, Array<String>] elements elements to store.
+  # @return [integer] 1 if at least 1 HyperLogLog internal register was altered. 0 otherwise.
+  def pfadd(key, *elements)
+    synchronize do |client|
+      client.call([:pfadd, key, elements])
+    end
+  end
 
+  # Return the approximated cardinality of the set(s) observed by the HyperLogLog at key(s).
+  # Available since 2.8.9.
+  #
+  # @example
+  #   redis.pfcount 'hll'
+  #   # => (integer) 5
+  #
+  # @param (String) key
+  # @return [integer] The approximated number of unique elements observed via #pfadd.
+  def pfcount(key)
+    synchronize do |client|
+      client.call([:pfcount, key])
+    end
+  end
+
+  # Merge N different HyperLogLogs into a single one.
+  # Available since 2.8.9.
+  #
+  # @example
+  #   redis.pfmerge 'hll', 'foo', 'bar', 'zap'
+  #   # => (String) 'OK'
+  #
+  # @param (String) key
+  # @return [String] The command just returns OK.
+  def pfmerge(destkey, *sourcekey)
+    synchronize do |client|
+      client.call([:pfmerge, destkey, sourcekey])
+    end
+  end
   def id
     @original_client.id
   end
